@@ -1,0 +1,29 @@
+version: '3'
+services: 
+    db:
+        image: postgres
+        ports: 
+            - "5432:5432"
+        networks: 
+            - postgres-compose
+        environment:
+            POSTGRES_PASSWORD: "12345"  
+        volumes: 
+            - /home/awadallak/Documentos/docker-git-flow/database/:/var/lib/postgresql/data/
+            - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    pgadmin-compose:
+        image: dpage/pgadmin4
+        environment: 
+            PGADMIN_DEFAULT_EMAIL: 'alexandre.awadallak@gmail.com'
+            PGADMIN_DEFAULT_PASSWORD: '123456'
+        ports: 
+            - "80:80"
+        depends_on: 
+            - db
+        networks: 
+            -   postgres-compose 
+
+networks: 
+    postgres-compose:
+        driver: bridge
